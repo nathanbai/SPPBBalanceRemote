@@ -1,32 +1,68 @@
-#include "Nrf2401.h"
 #include "Wire.h"
+#include <SoftwareSerial.h>
 
-Nrf2401 Radio;
-int RemoteButton = 7;
+SoftwareSerial WiFlySerial(6,5); //RX  TX
+
+int RemoteButton = 2;
 int ButtonValue = 0;
+boolean flag_test = false;
+int Received = 0;
+
+String RemoteSignal = "remote";
+
+void WiFiSend(String data_send)
+{
+  WiFlySerial.print(data_send);
+  WiFlySerial.println("");
+  WiFlySerial.println("");
+}
+
+void WiFiSend(unsigned int data_send)
+{ 
+  WiFlySerial.print(data_send);
+  WiFlySerial.println("");
+  WiFlySerial.println("");
+}
+
 
 void setup(void)
 {
   Wire.begin();
   Serial.begin(9600);
   pinMode(RemoteButton, INPUT);
-  
-  Radio.remoteAddress = 1;
-  Radio.txMode(2);
+  WiFlySerial.begin(9600);
 }
 
 void loop(void)
 {
-  ButtonValue = digitalRead(RemoteButton);
-  if(ButtonValue)
+  
+  /*if(WiFlySerial.available()) {
+    Received = WiFlySerial.read();
+    Serial.println(Received);
+  }
+  
+  if (Received == 49)      
   {
-    delay(1000);
+    Serial.println("Need to press button");
+    flag_test = true; 
+    Received = 0;
+  }
+  
+  if(flag_test)
+  {*/
     ButtonValue = digitalRead(RemoteButton);
     if(ButtonValue)
     {
-      Radio.data[0] = (0x55);
-      Radio.write();
-      delay(2000);
+      delay(200);
+      ButtonValue = digitalRead(RemoteButton);
+      if(ButtonValue)
+      {
+        Serial.println("pressed");
+        WiFiSend(RemoteSignal);
+        flag_test = false;
+        delay(2000);
+      }
     }
-  }
+  //}
+  
 }
