@@ -1,7 +1,7 @@
 #include "Wire.h"
 #include <SoftwareSerial.h>
 
-SoftwareSerial WiFlySerial(6,5); //RX  TX
+SoftwareSerial WiFlySerial(4,3); //RX  TX
 
 int RemoteButton = 2;
 int ButtonValue = 0;
@@ -15,6 +15,7 @@ void WiFiSend(String data_send)
   WiFlySerial.print(data_send);
   WiFlySerial.println("");
   WiFlySerial.println("");
+  Serial.println("wifi sent");
 }
 
 void WiFiSend(unsigned int data_send)
